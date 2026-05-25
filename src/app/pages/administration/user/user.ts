@@ -62,6 +62,7 @@ export class User implements OnInit {
     userDialog: boolean = false;
     userForm: Partial<UserModel> = {};
     editMode: boolean = false;
+    viewMode: boolean = false;
 
     users = signal<UserModel[]>([]);
     selectedUsers!: UserModel[] | null;
@@ -112,12 +113,21 @@ export class User implements OnInit {
     openNew() {
         this.userForm = {};
         this.editMode = false;
+        this.viewMode = false;
+        this.userDialog = true;
+    }
+
+    viewUser(user: UserModel) {
+        this.userForm = { ...user };
+        this.editMode = false;
+        this.viewMode = true;
         this.userDialog = true;
     }
 
     editUser(user: UserModel) {
         this.userForm = { ...user };
         this.editMode = true;
+        this.viewMode = false;
         this.userDialog = true;
     }
 
@@ -139,19 +149,33 @@ export class User implements OnInit {
         }
     }
 
-    deleteUser(user: UserModel) {
-        this.confirmationService.confirm({
-            message: `¿Seguro que deseas eliminar a ${user.nombres} ${user.apellidos}?`,
-            header: 'Confirmar',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.userService.deleteUser(user.id).subscribe(() => {
-                    this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Usuario eliminado' });
+deleteUser(user: UserModel) {
+    console.log('Click eliminar', user);
+
+    this.confirmationService.confirm({
+        message: `¿Seguro que deseas eliminar a ${user.nombres} ${user.apellidos}?`,
+        header: 'Confirmar',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+
+            this.userService.deleteUser(user.id).subscribe({
+                next: () => {
+
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Eliminado',
+                        detail: 'Usuario eliminado'
+                    });
+
                     this.loadUsers();
-                });
-            }
-        });
-    }
+                },
+                error: (err) => {
+                    console.error('Error DELETE', err);
+                }
+            });
+        }
+    });
+}
 
     restoreUser(user: UserModel) {
         this.userService.restoreUser(user.id).subscribe(() => {

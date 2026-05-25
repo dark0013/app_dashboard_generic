@@ -27,11 +27,7 @@
             </th>
             <th>Cédula</th>
             <th>Nombres</th>
-            <th>Apellidos</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Email</th>
-            <th>Username</th>
+            <th>Apellidos</th>            
             <th>Estado</th>
             <th>Acciones</th>
         </tr>
@@ -43,15 +39,12 @@
             </td>
             <td>{{ user.cedula }}</td>
             <td>{{ user.nombres }}</td>
-            <td>{{ user.apellidos }}</td>
-            <td>{{ user.direccion }}</td>
-            <td>{{ user.telefono }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.username }}</td>
+            <td>{{ user.apellidos }}</td>           
             <td>
                 <p-tag [value]="user.estado ? 'Activo' : 'Inactivo'" [severity]="user.estado ? 'success' : 'danger'"></p-tag>
             </td>
             <td>
+                <p-button icon="pi pi-info-circle" class="mr-2" [rounded]="true" [outlined]="true" (click)="viewUser(user)" />
                 <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editUser(user)" />
                 <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteUser(user)" />
                 <p-button icon="pi pi-refresh" severity="info" [rounded]="true" [outlined]="true" (click)="restoreUser(user)" *ngIf="!user.estado" />
@@ -60,41 +53,41 @@
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" [modal]="true" [closable]="true" [dismissableMask]="true" [header]="editMode ? 'Editar Usuario' : 'Nuevo Usuario'">
+<p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" [modal]="true" [closable]="true" [dismissableMask]="true" [header]="viewMode ? 'Información de Usuario' : (editMode ? 'Editar Usuario' : 'Nuevo Usuario')">
     <ng-template #content>
         <form (ngSubmit)="saveUser()" #userFormRef="ngForm">
             <div class="flex flex-col gap-4">
                 <div>
                     <label for="cedula" class="block font-bold mb-2">Cédula</label>
-                    <input type="text" pInputText id="cedula" [(ngModel)]="userForm.cedula" name="cedula" required />
+                    <input type="text" pInputText id="cedula" [(ngModel)]="userForm.cedula" name="cedula" required [readonly]="viewMode" />
                 </div>
                 <div>
                     <label for="nombres" class="block font-bold mb-2">Nombres</label>
-                    <input type="text" pInputText id="nombres" [(ngModel)]="userForm.nombres" name="nombres" required />
+                    <input type="text" pInputText id="nombres" [(ngModel)]="userForm.nombres" name="nombres" required [readonly]="viewMode" />
                 </div>
                 <div>
                     <label for="apellidos" class="block font-bold mb-2">Apellidos</label>
-                    <input type="text" pInputText id="apellidos" [(ngModel)]="userForm.apellidos" name="apellidos" required />
+                    <input type="text" pInputText id="apellidos" [(ngModel)]="userForm.apellidos" name="apellidos" required [readonly]="viewMode" />
                 </div>
                 <div>
                     <label for="direccion" class="block font-bold mb-2">Dirección</label>
-                    <input type="text" pInputText id="direccion" [(ngModel)]="userForm.direccion" name="direccion" required />
+                    <input type="text" pInputText id="direccion" [(ngModel)]="userForm.direccion" name="direccion" required [readonly]="viewMode" />
                 </div>
                 <div>
                     <label for="telefono" class="block font-bold mb-2">Teléfono</label>
-                    <input type="text" pInputText id="telefono" [(ngModel)]="userForm.telefono" name="telefono" required />
+                    <input type="text" pInputText id="telefono" [(ngModel)]="userForm.telefono" name="telefono" required [readonly]="viewMode" />
                 </div>
                 <div>
                     <label for="email" class="block font-bold mb-2">Email</label>
-                    <input type="email" pInputText id="email" [(ngModel)]="userForm.email" name="email" required />
+                    <input type="email" pInputText id="email" [(ngModel)]="userForm.email" name="email" required [readonly]="viewMode" />
                 </div>
                 <div>
                     <label for="username" class="block font-bold mb-2">Username</label>
-                    <input type="text" pInputText id="username" [(ngModel)]="userForm.username" name="username" required />
+                    <input type="text" pInputText id="username" [(ngModel)]="userForm.username" name="username" required [readonly]="viewMode" />
                 </div>
                 <div>
                     <label for="estado" class="block font-bold mb-2">Estado</label>
-                    <select id="estado" [(ngModel)]="userForm.estado" name="estado" required>
+                    <select id="estado" [(ngModel)]="userForm.estado" name="estado" required [disabled]="viewMode">
                         <option [ngValue]="true">Activo</option>
                         <option [ngValue]="false">Inactivo</option>
                     </select>
@@ -103,8 +96,11 @@
         </form>
     </ng-template>
     <ng-template #footer>
-        <p-button label="Cancelar" icon="pi pi-times" text (click)="userDialog = false" />
-        <p-button label="Guardar" icon="pi pi-check" (click)="saveUser()" [disabled]="!userForm.cedula || !userForm.nombres || !userForm.apellidos || !userForm.direccion || !userForm.telefono || !userForm.email || !userForm.username" />
+        <p-button label="Cerrar" icon="pi pi-times" text (click)="userDialog = false" />
+        <p-button *ngIf="!viewMode" label="Guardar" icon="pi pi-check" (click)="saveUser()" [disabled]="!userForm.cedula || !userForm.nombres || !userForm.apellidos || !userForm.direccion || !userForm.telefono || !userForm.email || !userForm.username" />
     </ng-template>
 </p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
 

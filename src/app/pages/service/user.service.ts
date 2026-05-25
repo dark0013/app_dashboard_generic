@@ -39,6 +39,7 @@ export class UserService {
     }
 
     deleteUser(id: number): Observable<void> {
+        console.log(`Deleting user with ID: ${id}`);
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 
