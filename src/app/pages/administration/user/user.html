@@ -26,8 +26,7 @@
                 <p-tableHeaderCheckbox />
             </th>
             <th>Cédula</th>
-            <th>Nombres</th>
-            <th>Apellidos</th>            
+            <th>Nombres</th>           
             <th>Estado</th>
             <th>Acciones</th>
         </tr>
@@ -38,8 +37,7 @@
                 <p-tableCheckbox [value]="user" />
             </td>
             <td>{{ user.cedula }}</td>
-            <td>{{ user.nombres }}</td>
-            <td>{{ user.apellidos }}</td>           
+            <td>{{ user.nombres + ' ' + user.apellidos }}</td>
             <td>
                 <p-tag [value]="user.estado ? 'Activo' : 'Inactivo'" [severity]="user.estado ? 'success' : 'danger'"></p-tag>
             </td>
@@ -53,7 +51,7 @@
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" [modal]="true" [closable]="true" [dismissableMask]="true" [header]="viewMode ? 'Información de Usuario' : (editMode ? 'Editar Usuario' : 'Nuevo Usuario')">
+<p-dialog [(visible)]="userDialog" [style]="{ width: '220px' }" [modal]="true" [closable]="true" [dismissableMask]="true" [header]="viewMode ? 'Información de Usuario' : (editMode ? 'Editar Usuario' : 'Nuevo Usuario')">
     <ng-template #content>
         <form (ngSubmit)="saveUser()" #userFormRef="ngForm">
             <div class="flex flex-col gap-4">
@@ -84,13 +82,6 @@
                 <div>
                     <label for="username" class="block font-bold mb-2">Username</label>
                     <input type="text" pInputText id="username" [(ngModel)]="userForm.username" name="username" required [readonly]="viewMode" />
-                </div>
-                <div>
-                    <label for="estado" class="block font-bold mb-2">Estado</label>
-                    <select id="estado" [(ngModel)]="userForm.estado" name="estado" required [disabled]="viewMode">
-                        <option [ngValue]="true">Activo</option>
-                        <option [ngValue]="false">Inactivo</option>
-                    </select>
                 </div>
             </div>
         </form>

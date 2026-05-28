@@ -6,16 +6,22 @@ import { AppTopbar } from './app.topbar';
 import { AppSidebar } from './app.sidebar';
 import { AppFooter } from './app.footer';
 import { LayoutService } from '../service/layout.service';
+import { AppBreadcrumb } from './app-breadcrumb/app-breadcrumb';
+//import { AppBreadcrumb } from './component/app-breadcrumb/app-breadcrumb';
 
 @Component({
     selector: 'app-layout',
     standalone: true,
-    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
-    template: `<div class="layout-wrapper" [ngClass]="containerClass">
+    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter, AppBreadcrumb],
+    template: `
+    <div class="layout-wrapper" [ngClass]="containerClass">
         <app-topbar></app-topbar>
         <app-sidebar></app-sidebar>
         <div class="layout-main-container">
             <div class="layout-main">
+             <div class="mb-4">
+                <app-breadcrumb></app-breadcrumb>
+             </div>
                 <router-outlet></router-outlet>
             </div>
             <app-footer></app-footer>
