@@ -60,6 +60,11 @@ export class AppMenu {
                         routerLink: ['/pages/user']
                     },
                     {
+                        label: 'Rol',
+                        icon: 'pi pi-fw pi-id-card',
+                        routerLink: ['/pages/rol']
+                    },
+                    {
                         label: 'Auth',
                         icon: 'pi pi-fw pi-user',
                         items: [
